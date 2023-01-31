@@ -1,0 +1,16 @@
+title = ""
+version = ""
+
+[author]
+    name = ""
+    email = ""
+
+[variables]
+    subject = ""
+    smtp_server = "smtp.gmail.com"
+    port = 587
+    sender_email = ""
+    password = ""
+    receiver_email = ""
+    exclusion_list = ["1", "2"]
+    excel_file = ""

@@ -4,6 +4,8 @@ import pandas
 from datetime import datetime
 import numpy as np
 import toml
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
 def is_negative(num):
     return num < 0
@@ -29,7 +31,7 @@ def contruct_reminder_message(data_frame: pandas.DataFrame, column_exclusion_lis
         t_index = t_index + 1
 
     
-    message = ""
+    message = "<html>"
     for i, col in enumerate(data_frame.columns):
         value = data_frame.loc[t_index, col]
         if col in column_exclusion_list:
@@ -37,12 +39,12 @@ def contruct_reminder_message(data_frame: pandas.DataFrame, column_exclusion_lis
         if str(value) == "nan":
             continue
         if i != 0:
-            message = message + "\n" + col + ": " + str(value)
+            message = message + "\n" + col + ": " + "<b>" + str(value) + "</b>"
         else:
             message = message + col + ": " +  str(value) + "\n"
 
     print(message)
-    return message
+    return message + "</html>"
 
 
 with open("config.toml", "r") as f:
@@ -82,6 +84,12 @@ try:
     msg['Subject'] = subject
     msg['From'] = sender_email
     msg['To'] = receiver_email
+  
+
+    message = MIMEText(message, "html")
+
+    msg.attach(message)
+
     msg.set_content(message)
 
     server.send_message(msg)
